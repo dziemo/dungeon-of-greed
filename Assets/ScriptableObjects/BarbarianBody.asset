@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bf5bb5b56b6c704bb431b761ff258a7, type: 3}
+  m_Name: BarbarianBody
+  m_EditorClassIdentifier: 
+  bodyPrefab: {fileID: 3717281471301106161, guid: aa9db08e607c6fa4eb2683d8f5e44e02,
+    type: 3}
+  armLeftPrefab: {fileID: 1823923172577200669, guid: 935cd02779e3fec48b565bdb1e706258,
+    type: 3}
+  armRightPrefab: {fileID: 5592330388627495771, guid: 5dbe23836508e0d419b5d6890ad0a3cf,
+    type: 3}
