@@ -15,8 +15,10 @@ public class GameplayCharacterController : MonoBehaviour
 
     Rigidbody rb;
     Vector3 moveDir;
-    Vector3 mousePoint;
+    Vector3 lookDir;
     Interactable interactableItem;
+
+    bool isMouseDrivenLook = false;
 
     private void Start()
     {
@@ -31,14 +33,18 @@ public class GameplayCharacterController : MonoBehaviour
         Instantiate(player.characterBody.armRightPrefab, armRightPos);
     }
 
-    public void LookGamepad (Vector3 dir)
+    public void LookGamepad(Vector3 dir)
     {
-        transform.forward = new Vector3(dir.x, 0, dir.y);
+        if (dir != Vector3.zero)
+        {
+            lookDir = new Vector3(dir.x, 0, dir.y);
+        }
     }
 
     public void LookMouse(Vector3 point)
     {
-        mousePoint = point;
+        point.y = transform.position.y;
+        lookDir = (point - transform.position).normalized;
     }
 
     public void Move (Vector3 dir)
@@ -56,7 +62,7 @@ public class GameplayCharacterController : MonoBehaviour
 
     private void Update()
     {
-        rb.MoveRotation(Quaternion.LookRotation((mousePoint - transform.position).normalized, Vector3.up));
+        rb.MoveRotation(Quaternion.LookRotation(lookDir, Vector3.up));
         rb.MovePosition(rb.position + (moveDir * characterSpeed * Time.deltaTime));
         InteractableCheck();
     }
