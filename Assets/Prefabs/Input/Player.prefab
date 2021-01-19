@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c4aa0030c312b4abf7d4f10c999953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 7148348820380357815, guid: e814c31726aaae54fa3501fda5e2c5dd,
-    type: 3}
+  headPrefab: {fileID: 0}
+  characterBody: {fileID: 0}
 --- !u!114 &3237102842016145680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,4 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4603fd457192bbd48a919d50a50a99c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  characterController: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 512

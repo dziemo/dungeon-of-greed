@@ -51,6 +51,10 @@ MonoBehaviour:
   armLeftPos: {fileID: 91024885854044136}
   armRightPos: {fileID: 91024886843075018}
   characterSpeed: 50
+  itemCheckRadius: 1
+  interactablesLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!54 &6022857526992925060
 Rigidbody:
   m_ObjectHideFlags: 0
