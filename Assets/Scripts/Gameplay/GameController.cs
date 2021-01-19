@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ScriptableObjectArchitecture;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,17 +8,35 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public GameObject gameplayePlayerPrefab;
+    public GameObjectCollection levels;
+
+    GameObject currentLevel;
+    LevelController currentLevelController;
 
     private void Start()
     {
-        foreach (var p in PlayerInput.all)
+        SpawnLevel();
+        SpawnPlayers();
+    }
+
+
+    private void SpawnLevel ()
+    {
+        currentLevel = Instantiate(levels[0]);
+        currentLevelController = currentLevel.GetComponent<LevelController>();
+    }
+
+    private void SpawnPlayers()
+    {
+        for (int i = 0; i < PlayerInput.all.Count; i++)
         {
+            var p = PlayerInput.all[i];
             p.SwitchCurrentActionMap("Player");
-            var character = Instantiate(gameplayePlayerPrefab, Vector3.one * Random.Range(-3, 3), Quaternion.identity, transform);
+            var character = Instantiate(gameplayePlayerPrefab, currentLevelController.spawns[i].position, Quaternion.identity, transform);
             character.GetComponent<GameplayCharacterController>().SpawnPlayer(p.GetComponent<PlayerData>());
             var pInput = p.GetComponent<PlayerInputController>();
-            pInput.enabled = true;
             pInput.rb = character.GetComponent<Rigidbody>();
+            pInput.enabled = true;
         }
     }
 
