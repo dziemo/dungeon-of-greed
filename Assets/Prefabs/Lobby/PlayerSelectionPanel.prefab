@@ -471,6 +471,7 @@ MonoBehaviour:
   nextBodyButton: {fileID: 7494833884646546037}
   previousBodyButton: {fileID: 5650182055347589264}
   readyButton: {fileID: 5169355161098385779}
+  playerReady: {fileID: 11400000, guid: d341ec4b25ee011448feff04d66f4783, type: 2}
 --- !u!1 &2860945375659342510
 GameObject:
   m_ObjectHideFlags: 0

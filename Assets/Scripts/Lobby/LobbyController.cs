@@ -7,11 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class LobbyController : MonoBehaviour
 {
-    public Transform panelsParent, eventsParent, lobbyCharactersPanel;
+    public Transform panelsParent, eventsParent;
 
     public GameObject eventSystem;
     public GameObject playerPanel;
     public GameObject lobbyCharacterPrefab;
+
+    Dictionary<GameObject, bool> playersReady = new Dictionary<GameObject, bool>();
+
+    Coroutine startCoroutine;
 
     private void Start()
     {
@@ -42,14 +46,42 @@ public class LobbyController : MonoBehaviour
         var multiEventSystem = eventSys.GetComponent<MultiplayerEventSystem>();
         var lobbyCharacterCtrl = Instantiate(lobbyCharacterPrefab, selectionCtlr.playerCharacterPos.position, selectionCtlr.playerCharacterPos.rotation, selectionCtlr.playerCharacterPos).GetComponent<LobbyCharacterController>();
         var playerData = player.GetComponent<PlayerData>();
-        
+
+        playersReady.Add(player, false);
+
         player.GetComponent<PlayerInput>().uiInputModule = eventSys.GetComponent<InputSystemUIInputModule>();
        
         multiEventSystem.playerRoot = panel;
         multiEventSystem.firstSelectedGameObject = selectionCtlr.firstSelected;
 
-        selectionCtlr.Setup(lobbyCharacterCtrl);
+        selectionCtlr.Setup(player, lobbyCharacterCtrl);
 
         lobbyCharacterCtrl.InitializeCharacter(playerData);
     }
+
+    public void OnPlayerReady (GameObject player)
+    {
+        playersReady[player] = !playersReady[player];
+
+        foreach (var p in playersReady)
+        {
+            if (!p.Value)
+            {
+                if (startCoroutine != null)
+                {
+                    startCoroutine = null;
+                }
+                return;
+            }
+        }
+
+        startCoroutine = StartCoroutine(CountdownGameStart());
+    }
+
+    IEnumerator CountdownGameStart ()
+    {
+        yield return new WaitForSeconds(3);
+        OnStartGame();
+    }
+
 }

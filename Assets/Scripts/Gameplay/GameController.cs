@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
 
     private void SpawnLevel ()
     {
-        currentLevel = Instantiate(levels[0]);
+        currentLevel = Instantiate(levels[0], transform);
         currentLevelController = currentLevel.GetComponent<LevelController>();
     }
 
@@ -32,10 +32,10 @@ public class GameController : MonoBehaviour
         {
             var p = PlayerInput.all[i];
             p.SwitchCurrentActionMap("Player");
-            var character = Instantiate(gameplayePlayerPrefab, currentLevelController.spawns[i].position, Quaternion.identity, transform);
+            var character = Instantiate(gameplayePlayerPrefab, currentLevelController.spawns[i].position, currentLevelController.spawns[i].rotation, transform);
             character.GetComponent<GameplayCharacterController>().SpawnPlayer(p.GetComponent<PlayerData>());
             var pInput = p.GetComponent<PlayerInputController>();
-            pInput.rb = character.GetComponent<Rigidbody>();
+            pInput.characterController = character.GetComponent<GameplayCharacterController>();
             pInput.enabled = true;
         }
     }
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
             p.SwitchCurrentActionMap("UI");
             var pInput = p.GetComponent<PlayerInputController>();
             pInput.enabled = false;
-            pInput.rb = null;
+            pInput.characterController = null;
         }
     }
 }
