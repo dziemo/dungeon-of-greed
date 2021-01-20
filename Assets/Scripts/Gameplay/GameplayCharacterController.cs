@@ -15,7 +15,7 @@ public class GameplayCharacterController : MonoBehaviour
     public LayerMask interactablesLayer;
 
     WeaponController currentWeapon;
-
+    Animator anim;
     CharacterController characterController;
     Vector3 moveDir;
     Vector3 lookDir;
@@ -25,14 +25,15 @@ public class GameplayCharacterController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         lookDir = transform.forward;
+        anim = GetComponent<Animator>();
     }
 
     public void SpawnPlayer(PlayerData player)
     {
-        Instantiate(player.headPrefab, headPos);
-        Instantiate(player.characterBody.bodyPrefab, bodyPos);
-        Instantiate(player.characterBody.armLeftPrefab, armLeftPos);
-        var rightArm = Instantiate(player.characterBody.armRightPrefab, armRightPos);
+        Instantiate(player.headPrefab, headPos.position, headPos.rotation, headPos);
+        Instantiate(player.characterBody.bodyPrefab, bodyPos.position, bodyPos.rotation, bodyPos);
+        Instantiate(player.characterBody.armLeftPrefab, armLeftPos.position, armLeftPos.rotation, armLeftPos);
+        var rightArm = Instantiate(player.characterBody.armRightPrefab, armRightPos.position, armRightPos.rotation, armRightPos);
         weaponPos = rightArm.transform.GetChild(0);
     }
 
@@ -55,6 +56,14 @@ public class GameplayCharacterController : MonoBehaviour
         moveDir = new Vector3(dir.x, 0, dir.y);
     }
 
+    public void Attack()
+    {
+        if (currentWeapon)
+        {
+            anim.SetTrigger("Attack");
+        }
+    }
+
     public void Interact ()
     {
         if (interactable)
@@ -66,13 +75,22 @@ public class GameplayCharacterController : MonoBehaviour
     private void Update()
     {
         characterController.transform.forward = lookDir;
-        characterController.Move(moveDir * characterSpeed * Time.deltaTime);
+
+        if (moveDir != Vector3.zero)
+        {
+            characterController.Move(moveDir * characterSpeed * Time.deltaTime);
+            anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+        }
         InteractableCheck();
     }
 
     private void InteractableCheck()
     {
-        var interactables = Physics.OverlapSphere(transform.position, itemCheckRadius, interactablesLayer);
+        var interactables = Physics.OverlapSphere(transform.position, itemCheckRadius, interactablesLayer, QueryTriggerInteraction.Collide);
         if (interactables.Length > 0)
         {
             interactable = interactables[0].GetComponent<Interactable>();

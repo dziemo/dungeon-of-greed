@@ -15,6 +15,7 @@ public abstract class WeaponController : Interactable
     void PickUp(GameplayCharacterController controller)
     {
         controller.OnPickup(this, gameObject);
+        gameObject.layer = 0;
     }
 
     public void Throw()

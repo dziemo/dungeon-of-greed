@@ -46,6 +46,16 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
+    private void OnAttack()
+    {
+        characterController.Attack();
+    }
+
+    private void OnAlternativeAttack()
+    {
+
+    }
+
     private void OnInteract ()
     {
         characterController.Interact();
