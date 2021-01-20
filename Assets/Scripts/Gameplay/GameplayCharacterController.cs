@@ -18,11 +18,10 @@ public class GameplayCharacterController : MonoBehaviour
     Vector3 lookDir;
     Interactable interactableItem;
 
-    bool isMouseDrivenLook = false;
-
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        lookDir = transform.forward;
     }
 
     public void SpawnPlayer(PlayerData player)

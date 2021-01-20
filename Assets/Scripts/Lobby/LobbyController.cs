@@ -57,6 +57,12 @@ public class LobbyController : MonoBehaviour
         selectionCtlr.Setup(player, lobbyCharacterCtrl);
 
         lobbyCharacterCtrl.InitializeCharacter(playerData);
+        
+        if (startCoroutine != null)
+        {
+            StopCoroutine(startCoroutine);
+            startCoroutine = null;
+        }
     }
 
     public void OnPlayerReady (GameObject player)
@@ -69,6 +75,7 @@ public class LobbyController : MonoBehaviour
             {
                 if (startCoroutine != null)
                 {
+                    StopCoroutine(startCoroutine);
                     startCoroutine = null;
                 }
                 return;
