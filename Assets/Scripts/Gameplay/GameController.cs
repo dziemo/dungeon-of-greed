@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject gameplayePlayerPrefab;
+    public GameObject gameplayPlayerPrefab;
     public GameObjectCollection levels;
 
     GameObject currentLevel;
@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
         {
             var p = PlayerInput.all[i];
             p.SwitchCurrentActionMap("Player");
-            var character = Instantiate(gameplayePlayerPrefab, currentLevelController.spawns[i].position, currentLevelController.spawns[i].rotation, transform);
+            var character = Instantiate(gameplayPlayerPrefab, currentLevelController.spawns[i].position, currentLevelController.spawns[i].rotation, transform);
             character.GetComponent<GameplayCharacterController>().SpawnPlayer(p.GetComponent<PlayerData>());
             var pInput = p.GetComponent<PlayerInputController>();
             pInput.characterController = character.GetComponent<GameplayCharacterController>();

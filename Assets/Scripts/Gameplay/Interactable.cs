@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public abstract class Interactable : MonoBehaviour
 {
-    public void Interact ()
-    {
-        Destroy(gameObject);
-    }
+    public abstract void Interact(GameObject player);
 }

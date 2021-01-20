@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5f321b9a411694e8a638003ef9c363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayePlayerPrefab: {fileID: 91024884999948738, guid: f8ae3b14ff104ed4392499d940b5c17b,
+  gameplayPlayerPrefab: {fileID: 91024884999948738, guid: f8ae3b14ff104ed4392499d940b5c17b,
     type: 3}
   levels: {fileID: 11400000, guid: 66a8a30b1a7ba6d479081e86034e22e9, type: 2}
 --- !u!4 &1504495541

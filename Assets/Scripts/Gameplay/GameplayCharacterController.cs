@@ -8,19 +8,22 @@ public class GameplayCharacterController : MonoBehaviour
     public Transform headPos;
     public Transform armLeftPos;
     public Transform armRightPos;
+    public Transform weaponPos;
 
     public float characterSpeed = 5f;
     public float itemCheckRadius = 2f;
     public LayerMask interactablesLayer;
 
-    Rigidbody rb;
+    WeaponController currentWeapon;
+
+    CharacterController characterController;
     Vector3 moveDir;
     Vector3 lookDir;
-    Interactable interactableItem;
+    Interactable interactable;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
         lookDir = transform.forward;
     }
 
@@ -29,7 +32,8 @@ public class GameplayCharacterController : MonoBehaviour
         Instantiate(player.headPrefab, headPos);
         Instantiate(player.characterBody.bodyPrefab, bodyPos);
         Instantiate(player.characterBody.armLeftPrefab, armLeftPos);
-        Instantiate(player.characterBody.armRightPrefab, armRightPos);
+        var rightArm = Instantiate(player.characterBody.armRightPrefab, armRightPos);
+        weaponPos = rightArm.transform.GetChild(0);
     }
 
     public void LookGamepad(Vector3 dir)
@@ -53,16 +57,16 @@ public class GameplayCharacterController : MonoBehaviour
 
     public void Interact ()
     {
-        if (interactableItem)
+        if (interactable)
         {
-            interactableItem.Interact();
+            interactable.Interact(gameObject);
         }
     }
 
     private void Update()
     {
-        rb.MoveRotation(Quaternion.LookRotation(lookDir, Vector3.up));
-        rb.MovePosition(rb.position + (moveDir * characterSpeed * Time.deltaTime));
+        characterController.transform.forward = lookDir;
+        characterController.Move(moveDir * characterSpeed * Time.deltaTime);
         InteractableCheck();
     }
 
@@ -71,12 +75,20 @@ public class GameplayCharacterController : MonoBehaviour
         var interactables = Physics.OverlapSphere(transform.position, itemCheckRadius, interactablesLayer);
         if (interactables.Length > 0)
         {
-            interactableItem = interactables[0].GetComponent<Interactable>();
+            interactable = interactables[0].GetComponent<Interactable>();
         }
         else
         {
-            interactableItem = null;
+            interactable = null;
         }
+    }
+
+    public void OnPickup (WeaponController controller, GameObject weaponObject)
+    {
+        currentWeapon = controller;
+        weaponObject.transform.SetParent(weaponPos);
+        weaponObject.transform.localPosition = Vector3.zero;
+        weaponObject.transform.localRotation = Quaternion.identity;
     }
 
     private void OnDrawGizmosSelected()

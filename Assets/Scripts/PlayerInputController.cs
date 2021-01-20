@@ -17,8 +17,10 @@ public class PlayerInputController : MonoBehaviour
     private void Start()
     {
         playerInput = GetComponent<PlayerInput>();
-        
-        if (playerInput.devices[0].device.displayName == "Mouse")
+
+        var deviceName = playerInput.devices[0].device.displayName;
+
+        if (deviceName == "Mouse" || deviceName == "Keyboard")
         {
             mouseController = true;
             cam = Camera.main;
