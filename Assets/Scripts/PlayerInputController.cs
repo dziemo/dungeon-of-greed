@@ -56,6 +56,11 @@ public class PlayerInputController : MonoBehaviour
 
     }
 
+    private void OnDash()
+    {
+        characterController.Dash();
+    }
+
     private void OnInteract ()
     {
         characterController.Interact();

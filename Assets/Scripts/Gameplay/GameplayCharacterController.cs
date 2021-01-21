@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 
 public class GameplayCharacterController : MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class GameplayCharacterController : MonoBehaviour
     public Transform weaponPos;
 
     public float characterSpeed = 5f;
+    public float dashForce = 5f;
     public float itemCheckRadius = 2f;
     public LayerMask interactablesLayer;
 
@@ -20,6 +24,8 @@ public class GameplayCharacterController : MonoBehaviour
     Vector3 moveDir;
     Vector3 lookDir;
     Interactable interactable;
+
+    bool isDisabled = false;
 
     private void Start()
     {
@@ -51,9 +57,17 @@ public class GameplayCharacterController : MonoBehaviour
         lookDir = (point - transform.position).normalized;
     }
 
-    public void Move (Vector3 dir)
+    public void Move(Vector3 dir)
     {
         moveDir = new Vector3(dir.x, 0, dir.y);
+    }
+
+    public void Interact()
+    {
+        if (interactable)
+        {
+            interactable.Interact(gameObject);
+        }
     }
 
     public void Attack()
@@ -64,29 +78,45 @@ public class GameplayCharacterController : MonoBehaviour
         }
     }
 
-    public void Interact ()
+    public void Dash()
     {
-        if (interactable)
+        if (!isDisabled)
         {
-            interactable.Interact(gameObject);
+            isDisabled = true;
+            RaycastHit colliderHit;
+            TweenerCore<Vector3, Vector3, VectorOptions> dash;
+            if (Physics.SphereCast(transform.position, 1f, moveDir * dashForce, out colliderHit))
+            {
+                dash = transform.DOMove(colliderHit.point, 0.5f);
+            }
+            else
+            {
+                dash = transform.DOMove(transform.position + (moveDir * dashForce), 0.5f);
+            }
+            
+            dash.onComplete += () => isDisabled = false;
         }
     }
 
     private void Update()
     {
-        characterController.transform.forward = lookDir;
+        if (!isDisabled)
+        {
+            characterController.transform.forward = lookDir;
 
-        if (moveDir != Vector3.zero)
-        {
-            characterController.Move(moveDir * characterSpeed * Time.deltaTime);
-            anim.SetBool("isWalking", true);
+            if (moveDir != Vector3.zero)
+            {
+                characterController.Move(moveDir * characterSpeed * Time.deltaTime);
+                anim.SetBool("isWalking", true);
+            }
+            else
+            {
+                anim.SetBool("isWalking", false);
+            }
+
+            InteractableCheck();
         }
-        else
-        {
-            anim.SetBool("isWalking", false);
-        }
-        InteractableCheck();
-    }
+    } 
 
     private void InteractableCheck()
     {
